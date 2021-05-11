@@ -15,10 +15,6 @@ mv ./ft_server/phpMyAdmin-4.9.4-all-languages ./ft_server/phpmyadmin
 RUN wget -P ft_server https://fr.wordpress.org/latest-fr_FR.tar.gz && \
 tar xC ft_server -f ./ft_server/latest-fr_FR.tar.gz && \
 rm -rf ft_server/latest-fr_FR.tar.gz
-RUN chown -R www-data:www-data ft_server && \
-		chmod -R 755 ft_server/wordpress && \
-		chmod -R 777 ft_server/phpmyadmin
-
 
 COPY ./srcs/default /etc/nginx/sites-available/.
 COPY ./srcs/wp-config.php ft_server/wordpress/wp-config.php
@@ -26,6 +22,9 @@ COPY ./srcs/config_data.sql ft_server
 COPY ./srcs/config.inc.php ft_server/phpmyadmin/config.inc.php
 COPY ./srcs/index.nginx-debian.html ft_server
 
+RUN chown -R www-data:www-data ft_server && \
+		chmod -R 755 ft_server/wordpress && \
+		chmod -R 755 ft_server/phpmyadmin
 
 CMD	service mysql start && \
 	mysql -u root < ft_server/config_data.sql && \
